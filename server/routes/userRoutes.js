@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 
-const countryStateCity = require('../data/location');
+const Location = require("../models/Location");
 
 const multer = require('multer');
 const User = require('../models/User');
@@ -69,25 +69,24 @@ router.post('/submit', upload.single('profilePhoto'), async (req, res) => {
 });
 
 // GET /api/countries
-router.get('/countries', (req, res) => {
-  const countryList = Object.keys(countryStateCity).map((code) => ({
-    code,
-    name: countryStateCity[code].name,
-  }));
+router.get('/countries', async (req, res) => {
+  const countryList = await Location.find({}, { code: 1, name: 1 });
   res.json(countryList);
 });
 
 // GET /api/states?country=IN
-router.get('/states', (req, res) => {
+router.get('/states', async(req, res) => {
   const { country } = req.query;
-  const stateList = countryStateCity[country]?.states || [];
+  const stateList = await Location.findOne({ code: country }) || [];
   res.json(stateList);
 });
 
 // GET /api/cities?state=Maharashtra
-router.get('/cities', (req, res) => {
+router.get('/cities',async (req, res) => {
   const { country, state } = req.query;
-  const cities = countryStateCity[country]?.states?.find((s) => s.name === state)?.cities || [];
+  const result = await Location.findOne({ code: country });
+  const stateObj = result?.states.find((s) => s.code === state);
+  const cities= stateObj?.cities || []
   res.json(cities);
 });
 
