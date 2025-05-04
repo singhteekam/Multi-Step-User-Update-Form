@@ -45,6 +45,7 @@ const UserForm = () => {
   });
   const [usernameStatus, setUsernameStatus] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [reqPassword, setReqPassword] = useState(false);
 
 
   const [step, setStep] = useState(1);
@@ -147,6 +148,12 @@ const UserForm = () => {
     e.preventDefault();
     if (validateForm()) {
       console.log(formData);
+
+      if(formData.newPassword && !formData.currentPassword) {
+        setReqPassword(true);
+        alert("Current password is required to set a new password.");
+        return;
+      }
 
       try {
         const response = await axios.post("/api/submit", formData, {
@@ -263,7 +270,7 @@ const UserForm = () => {
 
           <Form.Group controlId="currentPassword">
             <Form.Label>
-              Current Password <span className="text-danger">*</span>
+              Current Password
             </Form.Label>
             <InputGroup>
               <Form.Control
@@ -271,6 +278,7 @@ const UserForm = () => {
                 name="currentPassword"
                 value={formData.currentPassword}
                 onChange={handleChange}
+                required={reqPassword}
               />
               <Button
                 variant="outline-secondary"
@@ -283,7 +291,7 @@ const UserForm = () => {
 
           <Form.Group controlId="newPassword">
             <Form.Label>
-              New Password <span className="text-danger">*</span>
+              New Password
             </Form.Label>
             <InputGroup>
               <Form.Control
@@ -374,6 +382,7 @@ const UserForm = () => {
                 setFormData({
                   ...formData,
                   country: e.target.value,
+                  addressLine1: "",
                   state: "",
                   city: "",
                 });
