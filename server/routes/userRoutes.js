@@ -77,8 +77,8 @@ router.get('/countries', async (req, res) => {
 // GET /api/states?country=IN
 router.get('/states', async(req, res) => {
   const { country } = req.query;
-  const stateList = await Location.findOne({ code: country }) || [];
-  res.json(stateList);
+  const result = await Location.findOne({ code: country });
+  res.json(result?.states || []);
 });
 
 // GET /api/cities?state=Maharashtra
