@@ -97,6 +97,10 @@ const UserForm = () => {
   };
 
   const validateForm = () => {
+    if (!formData.profilePhoto) {
+      alert("Profile photo is required.");
+      return false;
+    }
     if (formData.profilePhoto) {
       const size = formData.profilePhoto.size / 1024 / 1024;
       const type = formData.profilePhoto.type;
@@ -114,6 +118,10 @@ const UserForm = () => {
       !/^(?=.*[!@#$%^&*])(?=.*\d).{8,}$/.test(formData.newPassword)
     ) {
       alert("Password must be 8+ chars with a number & special char.");
+      return false;
+    }
+    if(!formData.profession) {
+      alert("Profession is required.");
       return false;
     }
     if (formData.profession === "Entrepreneur" && !formData.companyName) {
@@ -332,6 +340,7 @@ const UserForm = () => {
               name="profession"
               value={formData.profession}
               onChange={handleChange}
+              required
             >
               <option value="">Select Profession</option>
               <option value="Student">Student</option>

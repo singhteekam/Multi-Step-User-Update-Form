@@ -35,6 +35,10 @@ const FormPreviewModal = ({formData, showPreview, setShowPreview, previewUrl, co
             <strong>City:</strong> {formData.city}
           </p>
           <p>
+            <strong>Date of Birth(mm/dd/yyyy):</strong>{" "}
+            {formData.dob && new Date(formData.dob).toLocaleDateString()}
+          </p>
+          <p>
             <strong>Gender:</strong>{" "}
             {formData.gender === "Other"
               ? formData.customGender
